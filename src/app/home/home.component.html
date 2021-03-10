@@ -1,1 +1,19 @@
-<p>home works!</p>
+<ng-container *tuiLet="connection$ | async">
+
+  <div *ngIf="walletService.address$ | async as address; else pleaseConnectTpl">
+    <span>Connected to: {{ address }}</span>
+
+    <span>Balance: {{ balance$ | async }} </span>
+  </div>
+
+</ng-container>
+
+<ng-template #pleaseConnectTpl>
+  <div>
+    <span>Please connect your wallet</span>
+  </div>
+
+  <button tuiButton type="button" [size]="'s'" [showLoader]="isLoading" (click)="connect()">
+    Connect wallet
+  </button>
+</ng-template>
