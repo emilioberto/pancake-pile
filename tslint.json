@@ -168,13 +168,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "cake",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "cake",
       "kebab-case"
     ]
   }
