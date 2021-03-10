@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import * as detectEthereumProvider from '@metamask/detect-provider';
+import detectEthereumProvider from '@metamask/detect-provider';
 import { iconsPathFactory, TuiDialogModule, TuiNotificationsModule, TuiRootModule, TUI_ICONS_PATH } from '@taiga-ui/core';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
