@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { BigNumber } from 'ethers';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { ConnectionResult, WalletService } from 'src/app/core/services/wallet.service';
+import { WalletService } from 'src/app/core/services/wallet.service';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 import { handleLoading } from 'src/app/shared/rxjs/operators';
 
@@ -19,8 +19,10 @@ export class HomeComponent extends BaseComponent {
   private readonly connectionTrigger = new BehaviorSubject(null);
   private readonly balanceTrigger = new BehaviorSubject(null);
 
-  connection$: Observable<ConnectionResult>;
+  connection$: Observable<string[]>;
   balance$: Observable<BigNumber>;
+  pendingCake$: Observable<BigNumber>;
+  isBsc$: Observable<boolean>;
 
   constructor(
     public walletService: WalletService
@@ -36,6 +38,14 @@ export class HomeComponent extends BaseComponent {
     this.balance$ = this.balanceTrigger
       .pipe(
         switchMap(() => this.walletService.balance().pipe(handleLoading(this)))
+      );
+    this.isBsc$ = timer(0, 1000)
+      .pipe(
+        switchMap(() => this.walletService.isBsc())
+      );
+    this.pendingCake$ = timer(0, 1000)
+      .pipe(
+        switchMap(() => this.walletService.pendingCake())
       );
   }
 

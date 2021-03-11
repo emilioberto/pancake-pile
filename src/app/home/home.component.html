@@ -1,9 +1,22 @@
 <ng-container *tuiLet="connection$ | async">
 
   <div *ngIf="walletService.address$ | async as address; else pleaseConnectTpl">
-    <span>Connected to: {{ address }}</span>
+    <p>
+      <span>Connected to: {{ address }}</span>
+    </p>
 
-    <span>Balance: {{ balance$ | async }} </span>
+    <p>
+      <span>IsBsc: {{ isBsc$ | async }} </span>
+    </p>
+
+    <p>
+      <span>Balance: {{ balance$ | async | formatEther }} </span>
+    </p>
+
+    <p>
+      <span>Pending Cake in Pool: {{ pendingCake$ | async | formatEther}} </span>
+    </p>
+
   </div>
 
 </ng-container>
