@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { Subscription } from 'rxjs';
+
 @Component({ template: '' })
 export abstract class BaseComponent implements OnInit, OnDestroy {
 
   isLoading = false;
+  subscription = new Subscription();
 
   constructor() { }
 
@@ -13,6 +16,7 @@ export abstract class BaseComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.onDestroy();
+    this.subscription.unsubscribe();
   }
 
   abstract onInit(): void;

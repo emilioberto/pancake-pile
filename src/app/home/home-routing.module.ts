@@ -6,7 +6,13 @@ import { HomeComponent } from 'src/app/home/home.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('src/app/home/pool-calculator/pool-calculator.module').then(m => m.PoolCalculatorModule)
+      }
+    ]
   },
 ];
 

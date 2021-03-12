@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { TuiNotification, TuiNotificationsService } from '@taiga-ui/core';
 import { BigNumber } from 'ethers';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 
-import { WalletService } from 'src/app/core/services/wallet.service';
+import { WalletQuery } from 'src/app/core/store/wallet.query';
 import { BaseComponent } from 'src/app/shared/components/base.component';
-import { handleLoading } from 'src/app/shared/rxjs/operators';
 
 @Component({
   selector: 'cake-home',
@@ -17,7 +17,6 @@ import { handleLoading } from 'src/app/shared/rxjs/operators';
 export class HomeComponent extends BaseComponent {
 
   private readonly connectionTrigger = new BehaviorSubject(null);
-  private readonly balanceTrigger = new BehaviorSubject(null);
 
   connection$: Observable<string[]>;
   balance$: Observable<BigNumber>;
@@ -25,34 +24,30 @@ export class HomeComponent extends BaseComponent {
   isBsc$: Observable<boolean>;
 
   constructor(
-    public walletService: WalletService
+    private notificationsService: TuiNotificationsService,
+    private walletQuery: WalletQuery
   ) {
     super();
   }
 
   onInit(): void {
-    // this.connection$ = this.connectionTrigger
-    //   .pipe(
-    //     switchMap(() => this.walletService.connect().pipe(handleLoading(this)))
-    //   );
-    // this.balance$ = this.balanceTrigger
-    //   .pipe(
-    //     switchMap(() => this.walletService.balance().pipe(handleLoading(this)))
-    //   );
-    // this.isBsc$ = timer(0, 1000)
-    //   .pipe(
-    //     switchMap(() => this.walletService.isBsc())
-    //   );
-    // this.pendingCake$ = timer(0, 1000)
-    //   .pipe(
-    //     switchMap(() => this.walletService.pendingCake())
-    //   );
+    this.subscription.add(
+      this.walletQuery.isBsc$
+        .pipe(
+          filter(isBsc => !isBsc),
+          switchMap(() => this.notifyIsNotBsc())
+        )
+        .subscribe()
+    );
   }
 
   onDestroy(): void { }
 
-  connect(): void {
-    this.connectionTrigger.next(1);
+  private notifyIsNotBsc(): Observable<void> {
+    return this.notificationsService.show(
+      'Plase ensure you are connected to the Binance Smart Chain',
+      { status: TuiNotification.Warning, autoClose: false }
+    );
   }
 
 }

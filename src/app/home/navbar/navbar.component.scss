@@ -1,3 +1,7 @@
-.connection-button {
-  min-width: 200px;
+nav {
+  background-color: var(--tui-accent);
+
+  .connection-button {
+    min-width: 200px;
+  }
 }
