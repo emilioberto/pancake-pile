@@ -7,7 +7,6 @@ import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
 import { WalletQuery } from 'src/app/core/store/wallet.query';
 import { WalletStore } from 'src/app/core/store/wallet.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
-import { CONSTANTS } from 'src/app/shared/constants/constants';
 import { CakePoolContract } from 'src/app/shared/contracts/cake-pool.contract';
 import { CakeTokenContract } from 'src/app/shared/contracts/cake.contract';
 
@@ -23,24 +22,33 @@ export class WalletService {
     private store: WalletStore,
     private query: WalletQuery,
   ) {
-    this.web3Provider.on(
-      'connect',
-      (connectInfo: ConnectInfo) => { this.store.update({ isBsc: connectInfo.chainId === CONSTANTS.BSC_CHAIN_ID }); }
-    );
+    const provider = new ethers.providers.Web3Provider(this.web3Provider);
+
+    // this.web3Provider.on(
+    //   'connect',
+    //   (connectInfo: ConnectInfo) => );
+    // )
+
+    // this.web3Provider.on(
+    //   'disconnect',
+    //   console.log
+    // );
 
     this.web3Provider.on(
       'chainChanged',
-      (chainId: string) => this.store.update({ isBsc: chainId === CONSTANTS.BSC_CHAIN_ID })
+      (chainId: string) => this.updateChain(chainId)
     );
 
     this.web3Provider.on(
       'accountsChanged',
-      (accounts: string[]) => {
+      async (accounts: string[]) => {
         if (accounts.length === 0) {
           // MetaMask is locked or the user has not connected any accounts
           console.log('Please connect to MetaMask.');
+          this.store.reset();
         } else if (accounts[0] !== this.query.currentAddress) {
           this.store.update({ address: accounts[0] });
+          this.updateChain((await provider.getNetwork()).chainId);
         }
       }
     );
@@ -60,6 +68,9 @@ export class WalletService {
       ).subscribe();
   }
 
+  private updateChain(chainId: string | number): void {
+    this.store.update({ chainId: chainId });
+  }
 
 
   // balance(): Observable<BigNumber> {
@@ -84,6 +95,8 @@ export class WalletService {
   // private get cakePoolContract(): Contract {
   //   return new ethers.Contract(CakePoolContract.address, CakePoolContract.ABI, this.provider);
   // }
+
+
 
 }
 

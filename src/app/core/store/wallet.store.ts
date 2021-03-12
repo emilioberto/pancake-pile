@@ -4,17 +4,17 @@ import { Store, StoreConfig } from '@datorama/akita';
 
 export interface WalletState {
   address: string;
-  isBsc: boolean;
+  chainId: string | number;
 }
 
 export function createInitialState(): WalletState {
   return {
     address: null,
-    isBsc: false
+    chainId: null
   };
 }
 
-@StoreConfig({ name: 'wallet' })
+@StoreConfig({ name: 'wallet', resettable: true })
 @Injectable({ providedIn: 'root' })
 export class WalletStore extends Store<WalletState> {
   constructor() {
