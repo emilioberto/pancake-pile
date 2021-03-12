@@ -24,16 +24,6 @@ export class WalletService {
   ) {
     const provider = new ethers.providers.Web3Provider(this.web3Provider);
 
-    // this.web3Provider.on(
-    //   'connect',
-    //   (connectInfo: ConnectInfo) => );
-    // )
-
-    // this.web3Provider.on(
-    //   'disconnect',
-    //   console.log
-    // );
-
     this.web3Provider.on(
       'chainChanged',
       (chainId: string) => this.updateChain(chainId)
@@ -69,7 +59,7 @@ export class WalletService {
   }
 
   private updateChain(chainId: string | number): void {
-    this.store.update({ chainId: chainId });
+    this.store.update({ chainId });
   }
 
 
