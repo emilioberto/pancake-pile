@@ -10,19 +10,18 @@ import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
 import { CakePoolContract } from 'src/app/shared/contracts/cake-pool.contract';
 import { CakeTokenContract } from 'src/app/shared/contracts/cake.contract';
 
-interface ConnectInfo {
-  chainId: string;
-}
+type Network = ethers.providers.Network;
 
 @Injectable({ providedIn: 'root' })
 export class WalletService {
+
+  provider = new ethers.providers.Web3Provider(this.web3Provider);
 
   constructor(
     @Inject(MetamaskWeb3Provider) private web3Provider: any,
     private store: WalletStore,
     private query: WalletQuery,
   ) {
-    const provider = new ethers.providers.Web3Provider(this.web3Provider);
 
     this.web3Provider.on(
       'chainChanged',
@@ -38,7 +37,7 @@ export class WalletService {
           this.store.reset();
         } else if (accounts[0] !== this.query.currentAddress) {
           this.store.update({ address: accounts[0] });
-          this.updateChain((await provider.getNetwork()).chainId);
+          this.updateChain((await this.provider.getNetwork()).chainId);
         }
       }
     );
@@ -55,6 +54,8 @@ export class WalletService {
           return of([] as string[]);
         }),
         tap(addresses => this.store.update({ address: addresses[0] })),
+        switchMap(() => this.getNetwork()),
+        tap(networkInfo => this.updateChain(networkInfo.chainId))
       ).subscribe();
   }
 
@@ -62,6 +63,9 @@ export class WalletService {
     this.store.update({ chainId });
   }
 
+  private getNetwork(): Observable<Network> {
+    return from(this.provider.getNetwork() as Promise<Network>);
+  }
 
   // balance(): Observable<BigNumber> {
   //   return from(this.provider.getBalance(this.currentAddress));
