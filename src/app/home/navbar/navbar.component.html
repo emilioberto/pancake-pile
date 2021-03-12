@@ -1,0 +1,11 @@
+<nav class="flex justify-end">
+  <button tuiButton type="button" [size]="'s'" [showLoader]="isLoading" (click)="connect()">
+    Connect
+  </button>
+</nav>
+
+<ng-template #connected>
+  <button tuiButton type="button" [size]="'s'" [showLoader]="isLoading" (click)="connect()">
+    {{ address$ | async | truncateAddress }}
+  </button>
+</ng-template>

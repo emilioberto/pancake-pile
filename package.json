@@ -24,6 +24,7 @@
     "@taiga-ui/core": "^2.6.2",
     "@taiga-ui/icons": "^2.6.2",
     "@taiga-ui/kit": "^2.6.2",
+    "basscss": "^8.1.0",
     "ethers": "^5.0.32",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
