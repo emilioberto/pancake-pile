@@ -31,22 +31,22 @@ export class HomeComponent extends BaseComponent {
   }
 
   onInit(): void {
-    this.connection$ = this.connectionTrigger
-      .pipe(
-        switchMap(() => this.walletService.connect().pipe(handleLoading(this)))
-      );
-    this.balance$ = this.balanceTrigger
-      .pipe(
-        switchMap(() => this.walletService.balance().pipe(handleLoading(this)))
-      );
-    this.isBsc$ = timer(0, 1000)
-      .pipe(
-        switchMap(() => this.walletService.isBsc())
-      );
-    this.pendingCake$ = timer(0, 1000)
-      .pipe(
-        switchMap(() => this.walletService.pendingCake())
-      );
+    // this.connection$ = this.connectionTrigger
+    //   .pipe(
+    //     switchMap(() => this.walletService.connect().pipe(handleLoading(this)))
+    //   );
+    // this.balance$ = this.balanceTrigger
+    //   .pipe(
+    //     switchMap(() => this.walletService.balance().pipe(handleLoading(this)))
+    //   );
+    // this.isBsc$ = timer(0, 1000)
+    //   .pipe(
+    //     switchMap(() => this.walletService.isBsc())
+    //   );
+    // this.pendingCake$ = timer(0, 1000)
+    //   .pipe(
+    //     switchMap(() => this.walletService.pendingCake())
+    //   );
   }
 
   onDestroy(): void { }

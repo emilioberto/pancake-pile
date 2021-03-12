@@ -1,13 +1,16 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import detectEthereumProvider from '@metamask/detect-provider';
+import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
+import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { iconsPathFactory, TuiDialogModule, TuiNotificationsModule, TuiRootModule, TUI_ICONS_PATH } from '@taiga-ui/core';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AppComponent } from 'src/app/app.component';
 import { CoreModule } from 'src/app/core/core.module';
+import { environment } from 'src/environments/environment';
 
 
 @NgModule({
@@ -21,29 +24,17 @@ import { CoreModule } from 'src/app/core/core.module';
     TuiRootModule,
     TuiNotificationsModule,
     TuiDialogModule,
-    CoreModule
+    CoreModule,
+    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    AkitaNgRouterStoreModule
   ],
   providers: [
     {
       provide: TUI_ICONS_PATH,
       useValue: iconsPathFactory('assets/taiga-ui/icons/'),
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: detectEthereumProviderFactory,
-      deps: [],
-      multi: true
-    }
+    { provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' }}
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-function detectEthereumProviderFactory(): () => Promise<void> {
-  return async () => {
-    const provider = await detectEthereumProvider();
-    if (!provider) {
-      console.log('Please install Metamask');
-    }
-  };
-}

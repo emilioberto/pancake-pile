@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { NavbarComponent } from 'src/app/home/navbar/navbar.component';
@@ -10,6 +9,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [NavbarComponent],
   imports: [
     SharedModule
+  ],
+  exports: [
+    NavbarComponent
   ]
 })
 export class NavbarModule { }

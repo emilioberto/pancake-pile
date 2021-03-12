@@ -1,11 +1,21 @@
-<nav class="flex justify-end">
-  <button tuiButton type="button" [size]="'s'" [showLoader]="isLoading" (click)="connect()">
+<nav class="flex justify-end items-center p2" *tuiLet="isConnected$ | async as isConnected">
+  <ng-container *tuiLet="isBsc$ | async as isBsc">
+    <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2" [status]="tuiStatusSuccess" value="BSC"></tui-badge>
+  </ng-container>
+  <button *ngIf="!isConnected; else connectedButton " tuiButton class="connection-button" type="button" [size]="'s'"
+    [showLoader]="isLoading" (click)="walletService.connect()">
     Connect
   </button>
 </nav>
 
-<ng-template #connected>
-  <button tuiButton type="button" [size]="'s'" [showLoader]="isLoading" (click)="connect()">
+
+<!-- Connected button Template -->
+<ng-template #connectedButton>
+  <button tuiButton class="connection-button" type="button" [size]="'s'" [showLoader]="isLoading">
     {{ address$ | async | truncateAddress }}
   </button>
+</ng-template>
+
+<ng-template #notBscBadge>
+  <tui-badge class="tui-space_right-2" [status]="tuiStatusError" value="BSC"></tui-badge>
 </ng-template>
