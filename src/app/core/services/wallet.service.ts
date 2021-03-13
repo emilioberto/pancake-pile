@@ -4,7 +4,6 @@ import { BigNumber, ethers } from 'ethers';
 import { from, Observable, of } from 'rxjs';
 import { catchError, switchMap, take, tap } from 'rxjs/operators';
 
-import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
 import { WalletQuery } from 'src/app/core/store/wallet.query';
 import { WalletStore } from 'src/app/core/store/wallet.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
@@ -15,12 +14,6 @@ type Network = ethers.providers.Network;
 export class WalletService {
 
   provider = new ethers.providers.Web3Provider(this.web3Provider);
-
-  network$ = from(this.provider.getNetwork() as Promise<Network>)
-    .pipe(tap(networkInfo => this.updateChain(networkInfo.chainId)));
-
-  balance$ = from(this.provider.getBalance(this.query.currentAddress))
-    .pipe(tap(balance => this.store.update({ balance })));
 
   constructor(
     @Inject(MetamaskWeb3Provider) private web3Provider: any,
@@ -62,6 +55,16 @@ export class WalletService {
         switchMap(() => this.network$)
       )
       .subscribe();
+  }
+
+  get network$(): Observable<Network> {
+    return from(this.provider.getNetwork() as Promise<Network>)
+      .pipe(tap(networkInfo => this.updateChain(networkInfo.chainId)));
+  }
+
+  get balance$(): Observable<BigNumber> {
+    return from(this.provider.getBalance(this.query.currentAddress))
+      .pipe(tap(balance => this.store.update({ balance })));
   }
 
   private updateChain(chainId: string | number): void {

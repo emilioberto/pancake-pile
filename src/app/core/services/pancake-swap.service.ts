@@ -15,12 +15,6 @@ export class PancakeSwapService {
 
   provider = new ethers.providers.Web3Provider(this.web3Provider);
 
-  // cakeBalance$ = (this.cakeTokenContract.balanceOf(this.walletQuery.currentAddress) as Observable<BigNumber>)
-  //   .pipe(tap(cakeBalance => this.store.update({ cakeBalance })));
-
-  // tokenName$ = (this.cakeTokenContract.name() as Observable<string>)
-  //   .pipe(tap(tokenName => this.store.update({ tokenName })));
-
   constructor(
     @Inject(MetamaskWeb3Provider) private web3Provider: any,
     private store: PancakeSwapStore,
