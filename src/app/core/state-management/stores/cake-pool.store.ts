@@ -7,17 +7,23 @@ import { PoolInfo, UserInfo } from 'src/app/shared/contracts/interfaces/cake-poo
 
 export interface CakePoolState {
   bonusMultiplier: BigNumber;
+  cakePerBlock: BigNumber;
   pendingCake: BigNumber;
   poolInfo: PoolInfo;
+  totalAllocPoint: BigNumber;
   userInfo: UserInfo;
+  apy: number;
 }
 
 export function createInitialState(): CakePoolState {
   return {
     bonusMultiplier: null,
+    cakePerBlock: null,
     pendingCake: null,
     poolInfo: null,
-    userInfo: null
+    totalAllocPoint: null,
+    userInfo: null,
+    apy: null,
   };
 }
 

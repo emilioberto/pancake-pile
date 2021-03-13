@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 
 import { BigNumber, ethers } from 'ethers';
-import { from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { from, Observable, zip } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
+import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { CakePoolStore } from 'src/app/core/state-management/stores/cake-pool.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
@@ -19,7 +20,8 @@ export class CakePoolService {
   constructor(
     @Inject(MetamaskWeb3Provider) private web3Provider: any,
     private store: CakePoolStore,
-    private walletQuery: WalletQuery
+    private walletQuery: WalletQuery,
+    private pancakeSwapService: PancakeSwapService
   ) { }
 
   private get cakePoolContract(): CakePoolContract {
@@ -46,31 +48,41 @@ export class CakePoolService {
       .pipe(tap(bonusMultiplier => this.store.update({ bonusMultiplier })));
   }
 
-  // doCalc(): void {
+  get cakePerBlock$(): Observable<BigNumber> {
+    return from(this.cakePoolContract.cakePerBlock())
+      .pipe(tap(cakePerBlock => this.store.update({ cakePerBlock })));
+  }
 
-  //   async getAPY() {
-  //     if (!this.poolAllocPoint) {
-  //       await this.getPoolInfo()
-  //     }
-  //     const contract = this.poolContract()
+  get totalAllocPoint$(): Observable<BigNumber> {
+    return from(this.cakePoolContract.totalAllocPoint())
+      .pipe(tap(totalAllocPoint => this.store.update({ totalAllocPoint })));
+  }
 
-  //     let result = await contract.methods.cakePerBlock().call({ from: this.userAddress })
-  //     const cakePerBlock = BN(result)
+  get apy$(): Observable<number> {
+    return zip(
+      this.poolInfo$,
+      this.cakePerBlock$,
+      this.totalAllocPoint$,
+      this.pancakeSwapService.cakePoolBalance$
+    )
+      .pipe(
+        map(([poolInfo, cakePerBlock, totalAllocPoint, poolLpSupply]) => {
+          const blockReward = cakePerBlock
+            .mul(poolInfo.allocPoint)
+            .div(totalAllocPoint);
 
-  //     const poolAllocPoint = BN(this.poolAllocPoint)
+          const numberOfBlocksInOneYear = CONSTANTS.CAKE_BLOCKS_PER_MINUTE * 60 * 24 * 365;
+          const annualBlockReward = blockReward
+            .mul(BigNumber.from(numberOfBlocksInOneYear))
+            .mul(BigNumber.from('1000000000000'));
+          const apy = annualBlockReward
+            .div(poolLpSupply)
+            .div(BigNumber.from('100000000')).toNumber() / 100;
+          return apy;
+        }),
+        tap(apy => this.store.update({ apy }))
+      );
 
-  //     result = await contract.methods.totalAllocPoint().call({ from: this.userAddress })
-  //     const totalAllocPoint = BN(result)
-
-  //     const blockReward = cakePerBlock.mul(poolAllocPoint).div(totalAllocPoint)
-  //     const numberOfBlocks = 20 * 60 * 24 * 365
-  //     const annualBlockReward = blockReward.mul(BN(numberOfBlocks.toString())).mul(BN("1000000000000"))
-
-  //     const cakeContract = this.cakeContract()
-  //     result = await cakeContract.methods.balanceOf(contract.options.address).call({ from: this.userAddress })
-  //     const lpSupply = BN(result)
-  //     this.apy =  annualBlockReward.div(lpSupply).divRound(BN("100000000")).toNumber() / 100
-  //   },
-  // }
+  }
 
 }

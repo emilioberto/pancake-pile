@@ -42,6 +42,9 @@
                 [value]="cakePoolQuery.formattedPendingCake$ | async">
               </tui-money>
             </label>
+            <label tuiLabel label="APY">
+              {{ cakePoolQuery.apy$ | async  }} %
+            </label>
           </div>
         </tui-island>
 

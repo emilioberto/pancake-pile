@@ -25,6 +25,8 @@ export class CakePoolQuery extends Query<CakePoolState> {
       map(amount => Number(amount))
     );
 
+  apy$ = this.select(state => state.apy);
+
   constructor(
     protected store: CakePoolStore,
     private formatEtherPipe: FormatEtherPipe

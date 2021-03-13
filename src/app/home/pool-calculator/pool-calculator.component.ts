@@ -25,7 +25,7 @@ export class PoolCalculatorComponent extends BaseComponent {
       switchMap(() => zip(
         this.walletService.balance$,
         this.pancakeSwapService.tokenSymbol$,
-        this.pancakeSwapService.cakeBalance$
+        this.pancakeSwapService.addressBalance$
       ))
     );
 
@@ -35,7 +35,8 @@ export class PoolCalculatorComponent extends BaseComponent {
         this.cakePoolService.poolPendingCake$,
         this.cakePoolService.userInfo$,
         this.cakePoolService.poolInfo$,
-        this.cakePoolService.poolBonusMultiplier$
+        this.cakePoolService.poolBonusMultiplier$,
+        this.cakePoolService.apy$,
       ))
     );
 

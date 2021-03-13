@@ -7,6 +7,7 @@ import { tap } from 'rxjs/operators';
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { PancakeSwapStore } from 'src/app/core/state-management/stores/pancake-swap.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
+import { CakePoolContractInfo } from 'src/app/shared/contracts/cake-pool.contract';
 import { CakeContractInfo } from 'src/app/shared/contracts/cake.contract';
 import { CakeContract } from 'src/app/shared/contracts/interfaces/cake.contract';
 
@@ -25,7 +26,11 @@ export class PancakeSwapService {
     return new ethers.Contract(CakeContractInfo.address, CakeContractInfo.ABI, this.provider) as CakeContract;
   }
 
-  get cakeBalance$(): Observable<BigNumber> {
+  get cakePoolBalance$(): Observable<BigNumber> {
+    return from(this.cakeTokenContract.balanceOf(CakePoolContractInfo.address));
+  }
+
+  get addressBalance$(): Observable<BigNumber> {
     return from(this.cakeTokenContract.balanceOf(this.walletQuery.currentAddress))
       .pipe(tap(cakeBalance => this.store.update({ cakeBalance })));
   }
