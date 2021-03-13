@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { BigNumber, Contract, ethers } from 'ethers';
-import { from, Observable, of, timer } from 'rxjs';
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
+import { BigNumber, ethers } from 'ethers';
+import { from, Observable, of } from 'rxjs';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 
+import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
 import { WalletQuery } from 'src/app/core/store/wallet.query';
 import { WalletStore } from 'src/app/core/store/wallet.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
-import { CakePoolContract } from 'src/app/shared/contracts/cake-pool.contract';
-import { CakeTokenContract } from 'src/app/shared/contracts/cake.contract';
 
 type Network = ethers.providers.Network;
 
@@ -16,6 +15,12 @@ type Network = ethers.providers.Network;
 export class WalletService {
 
   provider = new ethers.providers.Web3Provider(this.web3Provider);
+
+  network$ = from(this.provider.getNetwork() as Promise<Network>)
+    .pipe(tap(networkInfo => this.updateChain(networkInfo.chainId)));
+
+  balance$ = from(this.provider.getBalance(this.query.currentAddress))
+    .pipe(tap(balance => this.store.update({ balance })));
 
   constructor(
     @Inject(MetamaskWeb3Provider) private web3Provider: any,
@@ -54,43 +59,14 @@ export class WalletService {
           return of([] as string[]);
         }),
         tap(addresses => this.store.update({ address: addresses[0] })),
-        switchMap(() => this.getNetwork()),
-        tap(networkInfo => this.updateChain(networkInfo.chainId))
-      ).subscribe();
+        switchMap(() => this.network$)
+      )
+      .subscribe();
   }
 
   private updateChain(chainId: string | number): void {
     this.store.update({ chainId });
   }
-
-  private getNetwork(): Observable<Network> {
-    return from(this.provider.getNetwork() as Promise<Network>);
-  }
-
-  // balance(): Observable<BigNumber> {
-  //   return from(this.provider.getBalance(this.currentAddress));
-  // }
-
-  // isBsc(): Observable<boolean> {
-  //   return from(this.provider.detectNetwork())
-  //     .pipe(
-  //       map(network => network.chainId === CONSTANTS.BSC_CHAIN_ID)
-  //     );
-  // }
-
-  // pendingCake(): Observable<BigNumber> {
-  //   return from(this.cakePoolContract.pendingCake(CONSTANTS.CAKE_POOL_INDEX, this.currentAddress) as Promise<BigNumber>);
-  // }
-
-  // private get cakeTokenContract(): Contract {
-  //   return new ethers.Contract(CakeTokenContract.address, CakeTokenContract.ABI, this.provider);
-  // }
-
-  // private get cakePoolContract(): Contract {
-  //   return new ethers.Contract(CakePoolContract.address, CakePoolContract.ABI, this.provider);
-  // }
-
-
 
 }
 

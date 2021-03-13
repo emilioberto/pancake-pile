@@ -1,7 +1,8 @@
-<nav class="flex justify-end items-center p2" *tuiLet="isConnected$ | async as isConnected">
+<nav class="flex justify-end items-center p1" *tuiLet="isConnected$ | async as isConnected">
   <ng-container *ngIf="isConnected">
     <ng-container *tuiLet="isBsc$ | async as isBsc">
-      <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2" [status]="tuiStatusSuccess" value="BSC"></tui-badge>
+      <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2" [status]="tuiStatusSuccess" value="BSC">
+      </tui-badge>
     </ng-container>
   </ng-container>
   <button *ngIf="!isConnected; else connectedButton " tuiButton class="connection-button" type="button" [size]="'s'"
@@ -9,6 +10,7 @@
     Connect
   </button>
 </nav>
+
 
 
 <!-- Connected button Template -->

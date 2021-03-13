@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import { Query } from '@datorama/akita';
+import { map } from 'rxjs/operators';
 
 import { WalletState, WalletStore } from 'src/app/core/store/wallet.store';
 import { CONSTANTS } from 'src/app/shared/constants/constants';
+import { FormatEtherPipe } from 'src/app/shared/pipes/ethers/format-ether.pipe';
 
 @Injectable({ providedIn: 'root' })
 export class WalletQuery extends Query<WalletState> {
@@ -11,8 +13,17 @@ export class WalletQuery extends Query<WalletState> {
   isConnected$ = this.select(state => !!state.address);
   isBsc$ = this.select(state => state.chainId === CONSTANTS.BSC_CHAIN_ID || state.chainId === CONSTANTS.BSC_CHAIN_ID_HEX);
   address$ = this.select(state => state.address);
+  balance$ = this.select(state => state.balance);
+  formattedBalance$ = this.balance$
+    .pipe(
+      map(balance => this.formatEtherPipe.transform(balance)),
+      map(balance => Number(balance))
+    );
 
-  constructor(protected store: WalletStore) {
+  constructor(
+    protected store: WalletStore,
+    private formatEtherPipe: FormatEtherPipe
+  ) {
     super(store);
   }
 

@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 
 import { Store, StoreConfig } from '@datorama/akita';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export interface WalletState {
   address: string;
   chainId: string | number;
+  balance: BigNumber;
 }
 
 export function createInitialState(): WalletState {
   return {
     address: null,
-    chainId: null
+    chainId: null,
+    balance: null
   };
 }
 
