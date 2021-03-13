@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { TuiLineChartModule } from '@taiga-ui/addon-charts';
+import {TuiAxesModule} from '@taiga-ui/addon-charts';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TuiLetModule } from '@taiga-ui/cdk';
 import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
@@ -15,7 +17,9 @@ const TuiModules = [
   TuiBadgeModule,
   TuiIslandModule,
   TuiLabelModule,
-  TuiMoneyModule
+  TuiMoneyModule,
+  TuiAxesModule,
+  TuiLineChartModule
 ];
 
 const Pipes = [

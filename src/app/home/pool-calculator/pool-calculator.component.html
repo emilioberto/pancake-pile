@@ -29,7 +29,8 @@
         <tui-island *tuiLet="poolInfo$ | async as poolInfo">
           <p class="tui-island__category flex justify-between items-center">
             CAKE Pool info
-            <tui-badge class="tui-space_right-2 ml2" [status]="tuiStatusPrimary" value="{{ cakePoolQuery.bonusMultiplier$ | async }}x"></tui-badge>
+            <tui-badge class="tui-space_right-2 ml2" [status]="tuiStatusPrimary"
+              value="{{ cakePoolQuery.bonusMultiplier$ | async }}x"></tui-badge>
           </p>
           <div class="tui-island__paragraph">
             <label tuiLabel label="Amount">
@@ -43,11 +44,21 @@
               </tui-money>
             </label>
             <label tuiLabel label="APY">
-              {{ cakePoolQuery.apy$ | async  }} %
+              {{ cakePoolQuery.apy$ | async }} %
             </label>
           </div>
         </tui-island>
 
+      </div>
+    </div>
+
+    <div class="tui-row mt2">
+      <div #chartContainer class="tui-col_md-12">
+        <tui-axes *ngIf="chartWidth" class="axes" [verticalLines]="4" [horizontalLines]="2">
+          <tui-line-chart [x]="0" [y]="0" [height]="300" [width]="chartWidth" [smoothingFactor]="50"
+            [value]="value" [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="true">
+          </tui-line-chart>
+        </tui-axes>
       </div>
     </div>
   </div>
