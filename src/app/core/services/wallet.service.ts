@@ -4,8 +4,8 @@ import { BigNumber, ethers } from 'ethers';
 import { from, Observable, of } from 'rxjs';
 import { catchError, switchMap, take, tap } from 'rxjs/operators';
 
-import { WalletQuery } from 'src/app/core/store/wallet.query';
-import { WalletStore } from 'src/app/core/store/wallet.store';
+import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
+import { WalletStore } from 'src/app/core/state-management/stores/wallet.store';
 import { MetamaskWeb3Provider } from 'src/app/core/tokens/provider.token';
 
 type Network = ethers.providers.Network;

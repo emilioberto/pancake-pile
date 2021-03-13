@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TuiStatus } from '@taiga-ui/kit';
 
 import { WalletService } from 'src/app/core/services/wallet.service';
-import { WalletQuery } from 'src/app/core/store/wallet.query';
+import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({

@@ -1,7 +1,9 @@
 <div class="p2">
   <div class="container">
     <div class="tui-row">
+      <!-- Wallet info -->
       <div class="tui-col_md-6">
+
         <tui-island *tuiLet="walletInfo$ | async as walletInfo">
           <p class="tui-island__category">Wallet info</p>
           <div class="tui-island__paragraph">
@@ -16,9 +18,33 @@
                 [value]="pancakeSwapQuery.formattedCakeBalance$ | async">
               </tui-money>
             </label>
-
           </div>
         </tui-island>
+
+      </div>
+
+      <div class="tui-col_md-6">
+
+        <!-- Pool info -->
+        <tui-island *tuiLet="poolInfo$ | async as poolInfo">
+          <p class="tui-island__category flex justify-between items-center">
+            CAKE Pool info
+            <tui-badge class="tui-space_right-2 ml2" [status]="tuiStatusPrimary" value="{{ cakePoolQuery.bonusMultiplier$ | async }}x"></tui-badge>
+          </p>
+          <div class="tui-island__paragraph">
+            <label tuiLabel label="Amount">
+              <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+                [value]="cakePoolQuery.formattedAmount$ | async">
+              </tui-money>
+            </label>
+            <label tuiLabel label="Pending">
+              <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+                [value]="cakePoolQuery.formattedPendingCake$ | async">
+              </tui-money>
+            </label>
+          </div>
+        </tui-island>
+
       </div>
     </div>
   </div>

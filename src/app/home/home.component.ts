@@ -5,7 +5,7 @@ import { BigNumber } from 'ethers';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 
-import { WalletQuery } from 'src/app/core/store/wallet.query';
+import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({

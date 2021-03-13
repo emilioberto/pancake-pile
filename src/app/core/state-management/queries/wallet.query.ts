@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Query } from '@datorama/akita';
 import { map } from 'rxjs/operators';
 
-import { WalletState, WalletStore } from 'src/app/core/store/wallet.store';
+import { WalletState, WalletStore } from 'src/app/core/state-management/stores/wallet.store';
 import { CONSTANTS } from 'src/app/shared/constants/constants';
 import { FormatEtherPipe } from 'src/app/shared/pipes/ethers/format-ether.pipe';
 
