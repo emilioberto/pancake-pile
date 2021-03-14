@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, ElementRef, NgZone, ViewChild } fro
 import { TUI_DEFAULT_STRINGIFY } from '@taiga-ui/cdk';
 import { TuiPoint } from '@taiga-ui/core';
 import { TuiStatus } from '@taiga-ui/kit';
-import { BehaviorSubject, zip } from 'rxjs';
-import { delay, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { zip } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { CakePoolService } from 'src/app/core/services/cake-pool.service';
 import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
@@ -13,7 +13,6 @@ import { CakePoolQuery } from 'src/app/core/state-management/queries/cake-pool.q
 import { PancakeSwapQuery } from 'src/app/core/state-management/queries/pancake-swap.query';
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { BaseComponent } from 'src/app/shared/components/base.component';
-import { handleLoading } from 'src/app/shared/rxjs/operators';
 
 @Component({
   selector: 'cake-pool-calculator',
@@ -67,9 +66,7 @@ export class PoolCalculatorComponent extends BaseComponent {
     public walletQuery: WalletQuery,
     private cakePoolService: CakePoolService,
     private pancakeSwapService: PancakeSwapService,
-    private walletService: WalletService,
-    private ngZone: NgZone
-  ) {
+    private walletService: WalletService  ) {
     super();
   }
 

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 
 import { BigNumber, ethers, Signer } from 'ethers';
+import { formatEther, formatUnits, parseEther, parseUnits } from 'ethers/lib/utils';
 import { from, Observable, of, zip } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -14,6 +15,8 @@ import { CakeContractInfo } from 'src/app/shared/contracts/cake.contract';
 import { CakePoolContract, PoolInfo, UserInfo } from 'src/app/shared/contracts/interfaces/cake-pool.contract';
 import { SwapContractInfo } from 'src/app/shared/contracts/swap.contract';
 import { BnbContractInfo } from 'src/app/shared/contracts/wbnb.contract';
+import { InterestsResult } from 'src/app/shared/models/interests-result.model';
+import { calculateComposedInterestRate, calculateCompoundInterests, calculateInterests, calculatePeriodInterestRate } from 'src/app/shared/utils/interests.utils';
 
 @Injectable({ providedIn: 'root' })
 export class CakePoolService {
@@ -110,46 +113,38 @@ export class CakePoolService {
         tap(([pendingCake, userInfo, gasUnitPrice, apy, estimatedGas, cakeBnbConversionRate]) => {
 
           const days = new Array(60).fill(null).map((x, index, arr) => index + 1);
-          const estimatedGasInCAKE = estimatedGas.mul(cakeBnbConversionRate[0]).mul(ethers.utils.parseUnits('1', 'gwei'));
+          const networkFeeInCake = this.calculateEstimatedGasInCake(estimatedGas, gasUnitPrice, cakeBnbConversionRate);
+          this.store.update({ networkFeeInCake });
 
+          const dailyEarnings = days.map(daysPerCompound => {
+            const compoundsPerMonth = 30 / daysPerCompound;
+            const amountInPool = parseFloat(ethers.utils.formatUnits(userInfo.amount));
+            const interestRate = calculatePeriodInterestRate(apy, (30 / daysPerCompound));
+            const composedInterestRate = calculateComposedInterestRate(apy, daysPerCompound);
+            const cakesPerPeriod = calculateInterests(amountInPool, interestRate);
+            const feesPerMonth = networkFeeInCake * compoundsPerMonth;
+            const cakesPerMonth = calculateCompoundInterests(amountInPool, composedInterestRate) - amountInPool - feesPerMonth;
 
-          const dailyEarnings = days.map(day => {
-            const periodInterestRate = 1 + ((apy / 365) / 100);
-            // const periodCount = (720 * months) / hours;
-            const investedAmount = userInfo.amount;
-            const networkFee = estimatedGasInCAKE;
-            // const composedInterestRate = periodInterestRate ** periodCount;
-            // const totalFeeCost = networkFee * periodCount;
-            // const result = (userInfo.amount * composedInterestRate - totalFeeCost - userInfo.amount);
-            const stackedAmount = parseFloat(ethers.utils.formatUnits(userInfo.amount));
-            const cakesByPeriod = stackedAmount * ((periodInterestRate * day) - 1);
-            const compounded = ((stackedAmount * (periodInterestRate ** day) - stackedAmount)) * (30 / day);
-            return compounded;
+            return {
+              day: daysPerCompound,
+              compoundsPerMonth,
+              cakesPerPeriod,
+              cakesPerMonth,
+              feesPerMonth
+            } as InterestsResult;
           });
-
           debugger;
         })
-
-
-
-        //   map(([pendingCake, gasUnitPrice]) => {
-        //     this.cakePoolContract.estimateGas.enterStaking(pendingCake || 1, { from: this.walletQuery.currentAddress })
-        //       .then((gas: any) => {
-        //         const estimatedGasInBNB = gas.mul(gasUnitPrice);
-        //         const bbb = ethers.utils.formatEther(estimatedGasInBNB);
-        //         debugger;
-        //       });
-
-        //     this.swapContract.getAmountsIn(ethers.utils.parseUnits('1'), [CakeContractInfo.address, BnbContractInfo.address])
-        //       .then((res: any) => {
-        //         debugger;
-        //       });
-        //   })
       );
   }
 
   private estimatedGas$(pendingCake: BigNumber): Observable<BigNumber> {
-    return from(this.cakePoolContract.estimateGas.enterStaking(pendingCake || 1, { from: this.walletQuery.currentAddress }));
+    return from(
+      this.cakePoolContract.estimateGas.enterStaking(
+        pendingCake || 1,
+        { from: this.walletQuery.currentAddress }
+      )
+    );
   }
 
   private get cakeBnbConversionRate$(): Observable<BigNumber[]> {
@@ -159,54 +154,12 @@ export class CakePoolService {
     ) as Promise<BigNumber[]>);
   }
 
-  calc(): any {
+  private calculateEstimatedGasInCake(estimatedGas: BigNumber, gasUnitPrice: BigNumber, cakeBnbConversionRate: BigNumber[]): number {
+    const estimatedGasInBNB = estimatedGas.mul(gasUnitPrice);
+    const bnbGasValue = formatEther(estimatedGasInBNB);
+    const cakeBnbConversionRateValue = formatEther(cakeBnbConversionRate[0]);
 
-    // const periodInterestRate = ((this.apyToCalc / 365 / 24) * hours) / 100 + 1
-    // const periodCount = (720 * months) / hours
-    // const investedAmount = this.amountToCalc
-    // const networkFee = this.estimatedGasInCAKE
-
-    // const composedInterestRate = periodInterestRate ** periodCount
-    // const totalFeeCost = networkFee * periodCount
-
-    // const result = (investedAmount * composedInterestRate - totalFeeCost - investedAmount)
-
-    // const cakesByPeriod = investedAmount * (periodInterestRate - 1)
-
-    // if (logDebugInfo) {
-    //   try {
-    //     console.debug('==================================================================')
-    //     console.debug('periodLengthInHours: ' + hours)
-    //     console.debug('periodInterestRate: ' + periodInterestRate)
-    //     console.debug('periodCount: ' + periodCount)
-    //     console.debug('investedAmount: ' + this.fromWei(investedAmount) + ' CAKES')
-    //     console.debug('networkFee: ' + this.fromWei(networkFee) + ' CAKES')
-    //     console.debug("composedInterestRate: " + composedInterestRate)
-    //     console.debug("totalFeeCost: " + this.fromWei(totalFeeCost) + ' CAKES')
-    //     console.debug("EARNED CAKES AFTER 1 MONTH: " + this.fromWei(result) + ' CAKES')
-    //   }
-    //   catch (e){}
-    // }
-
-    // if (result < 0) {
-    //   return 0
-    // }
-
-    // if (pushData) {
-    //   this.calculatedData.push({
-    //     periodLengthInHours: hours,
-    //     cakesByPeriod: cakesByPeriod,
-    //     periodInterestRate: periodInterestRate,
-    //     periodCount: periodCount,
-    //     investedAmount: investedAmount,
-    //     networkFeeInCakes: networkFee,
-    //     composedInterestRate: composedInterestRate,
-    //     totalFeeCostInPeriod: totalFeeCost,
-    //     earned: result
-    //   })
-    // }
-
-    // return this.fromWei(result)
+    return parseFloat(bnbGasValue) * parseFloat(cakeBnbConversionRateValue);
   }
 
 }

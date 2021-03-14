@@ -13,6 +13,7 @@ export interface CakePoolState {
   totalAllocPoint: BigNumber;
   userInfo: UserInfo;
   apy: number;
+  networkFeeInCake: number;
 }
 
 export function createInitialState(): CakePoolState {
@@ -24,6 +25,7 @@ export function createInitialState(): CakePoolState {
     totalAllocPoint: null,
     userInfo: null,
     apy: null,
+    networkFeeInCake: null,
   };
 }
 
