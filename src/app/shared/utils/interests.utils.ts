@@ -11,6 +11,6 @@ export function calculatePeriodInterestRate(apy: number, days: number): number {
 }
 
 export function calculateComposedInterestRate(apy: number, period: number): number {
-  return ((apy / 1e2) / (365 / period)) ** ((365 / period) * 30);
+  return (apy / (1e2 * (365 / period))) ** (365 * (30 / 365));
 }
 

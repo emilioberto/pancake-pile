@@ -124,7 +124,7 @@ export class CakePoolService {
             const cakesPerPeriod = calculateInterests(amountInPool, interestRate);
             const feesPerMonth = networkFeeInCake * compoundsPerMonth;
             const cakesPerMonth = calculateCompoundInterests(amountInPool, composedInterestRate) - amountInPool - feesPerMonth;
-
+            // (126.84 / (100 * 365)) ^ (((365/30) * 1) * 30)
             return {
               day: daysPerCompound,
               compoundsPerMonth,
