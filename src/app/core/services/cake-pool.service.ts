@@ -121,7 +121,7 @@ export class CakePoolService {
             const interestRate = calculatePeriodInterestRate(apy, day);
             const composedInterestRate = calculateComposedInterestRate(apy, day);
             const cakePerMonthSimpleInterest = (amountInPool * interestRate) - amountInPool;
-            const cakePerMonthComposedInterest = (amountInPool * composedInterestRate * day) - amountInPool;
+            const cakePerMonthComposedInterest = (amountInPool * composedInterestRate) - amountInPool;
             const periodFees = networkFeeInCake * day;
 
             return {
