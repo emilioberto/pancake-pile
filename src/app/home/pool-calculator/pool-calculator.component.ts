@@ -66,7 +66,7 @@ export class PoolCalculatorComponent extends BaseComponent {
     public walletQuery: WalletQuery,
     private cakePoolService: CakePoolService,
     private pancakeSwapService: PancakeSwapService,
-    private walletService: WalletService  ) {
+    private walletService: WalletService) {
     super();
   }
 

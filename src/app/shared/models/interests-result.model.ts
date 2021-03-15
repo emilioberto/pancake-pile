@@ -1,7 +1,9 @@
 export interface InterestsResult {
   day: number;
-  compoundsPerMonth: number;
-  feesPerMonth: number;
-  cakesPerPeriod: number;
-  cakesPerMonth: number;
+  interestRate: number;
+  composedInterestRate: number;
+  cakePerMonthSimpleInterest: number;
+  cakePerMonthComposedInterest: number;
+  networkFeeInCake: number;
+  periodFees: number;
 }

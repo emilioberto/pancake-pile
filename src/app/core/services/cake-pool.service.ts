@@ -16,7 +16,7 @@ import { CakePoolContract, PoolInfo, UserInfo } from 'src/app/shared/contracts/i
 import { SwapContractInfo } from 'src/app/shared/contracts/swap.contract';
 import { BnbContractInfo } from 'src/app/shared/contracts/wbnb.contract';
 import { InterestsResult } from 'src/app/shared/models/interests-result.model';
-import { calculateComposedInterestRate, calculateCompoundInterests, calculateInterests, calculatePeriodInterestRate } from 'src/app/shared/utils/interests.utils';
+import { calculateComposedInterestRate, calculatePeriodInterestRate } from 'src/app/shared/utils/interests.utils';
 
 @Injectable({ providedIn: 'root' })
 export class CakePoolService {
@@ -116,21 +116,22 @@ export class CakePoolService {
           const networkFeeInCake = this.calculateEstimatedGasInCake(estimatedGas, gasUnitPrice, cakeBnbConversionRate);
           this.store.update({ networkFeeInCake });
 
-          const dailyEarnings = days.map(daysPerCompound => {
-            const compoundsPerMonth = 30 / daysPerCompound;
+          const dailyEarnings = days.map(day => {
             const amountInPool = parseFloat(ethers.utils.formatUnits(userInfo.amount));
-            const interestRate = calculatePeriodInterestRate(apy, (30 / daysPerCompound));
-            const composedInterestRate = calculateComposedInterestRate(apy, daysPerCompound);
-            const cakesPerPeriod = calculateInterests(amountInPool, interestRate);
-            const feesPerMonth = networkFeeInCake * compoundsPerMonth;
-            const cakesPerMonth = calculateCompoundInterests(amountInPool, composedInterestRate) - amountInPool - feesPerMonth;
-            // (126.84 / (100 * 365)) ^ (((365/30) * 1) * 30)
+            const interestRate = calculatePeriodInterestRate(apy, day);
+            const composedInterestRate = calculateComposedInterestRate(apy, day);
+            const cakePerMonthSimpleInterest = (amountInPool * interestRate) - amountInPool;
+            const cakePerMonthComposedInterest = (amountInPool * composedInterestRate * day) - amountInPool;
+            const periodFees = networkFeeInCake * day;
+
             return {
-              day: daysPerCompound,
-              compoundsPerMonth,
-              cakesPerPeriod,
-              cakesPerMonth,
-              feesPerMonth
+              day,
+              interestRate,
+              composedInterestRate,
+              cakePerMonthSimpleInterest,
+              cakePerMonthComposedInterest,
+              networkFeeInCake,
+              periodFees
             } as InterestsResult;
           });
           debugger;

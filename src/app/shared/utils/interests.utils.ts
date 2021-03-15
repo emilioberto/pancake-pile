@@ -1,16 +1,8 @@
-export function calculateInterests(amount: number, interestRate: number): number {
-  return amount * interestRate;
-}
-
-export function calculateCompoundInterests(amount: number, composedInterestRate: number): number {
-  return amount * composedInterestRate;
-}
-
 export function calculatePeriodInterestRate(apy: number, days: number): number {
-  return ((apy / 365) * days) / 1e2;
+  return (1 + (apy / (1e2 * 365))) * days;
 }
 
-export function calculateComposedInterestRate(apy: number, period: number): number {
-  return (apy / (1e2 * (365 / period))) ** (365 * (30 / 365));
+export function calculateComposedInterestRate(apy: number, days: number): number {
+  return (1 + (apy / (1e2 * 365) * days)) ** (365 / (365 / (30 / days)));
 }
 
