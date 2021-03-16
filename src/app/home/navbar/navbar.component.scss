@@ -1,7 +1,27 @@
 nav {
-  background-color: var(--tui-accent);
+  background-color: #D1884F;
+  border-bottom: 2px solid #724111;
 
   .connection-button {
     min-width: 200px;
+  }
+
+  tui-wrapper[data-appearance='pancakeButton'] {
+    background: #FEDC90;
+    color: #632F01;
+
+    &[data-state='hovered'] {
+      background: #FEDC90;
+      border: 2px solid #632F01;
+    }
+
+    &[data-state='pressed'] {
+      background: #632F01;
+      color: #FEDC90;
+    }
+
+    &[data-state='disabled'] {
+      background: #eaecee;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 import { TuiStatus } from '@taiga-ui/kit';
 
@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
   selector: 'cake-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent extends BaseComponent {

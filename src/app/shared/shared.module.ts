@@ -5,7 +5,7 @@ import { TuiLineChartModule } from '@taiga-ui/addon-charts';
 import {TuiAxesModule} from '@taiga-ui/addon-charts';
 import { TuiMoneyModule } from '@taiga-ui/addon-commerce';
 import { TuiLetModule } from '@taiga-ui/cdk';
-import { TuiButtonModule, TuiLabelModule } from '@taiga-ui/core';
+import { TuiButtonModule, TuiLabelModule, TuiNotificationModule } from '@taiga-ui/core';
 import { TuiBadgeModule, TuiIslandModule } from '@taiga-ui/kit';
 
 import { FormatEtherPipe } from 'src/app/shared/pipes/ethers/format-ether.pipe';
@@ -19,7 +19,8 @@ const TuiModules = [
   TuiLabelModule,
   TuiMoneyModule,
   TuiAxesModule,
-  TuiLineChartModule
+  TuiLineChartModule,
+  TuiNotificationModule
 ];
 
 const Pipes = [

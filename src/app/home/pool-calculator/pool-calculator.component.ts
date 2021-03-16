@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
 import { TUI_DEFAULT_STRINGIFY } from '@taiga-ui/cdk';
-import { TuiPoint } from '@taiga-ui/core';
+import { TuiNotification, TuiPoint } from '@taiga-ui/core';
 import { TuiStatus } from '@taiga-ui/kit';
 import { zip } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -28,10 +28,11 @@ export class PoolCalculatorComponent extends BaseComponent {
   chartY = 1;
   chartHeight = 100;
   chartWidth: number;
-  axisXLabels: string[];
+  axisXLabels = new Array(30).fill(null).map((item, index, array) => ((index + 1).toString()));
   axisYLabels: string[];
   suggestedCompound: InterestsResult;
-  tuiStatusPrimary = TuiStatus.Primary;
+  tuiStatusCustom = TuiStatus.Custom;
+  tuiStatusSuccess = TuiNotification.Success;
   readonly stringify = TUI_DEFAULT_STRINGIFY;
 
   walletInfo$ = this.walletQuery.address$
@@ -64,8 +65,7 @@ export class PoolCalculatorComponent extends BaseComponent {
 
         this.chartHeight = orderedTotalCakes[orderedTotalCakes.length - 1] - orderedTotalCakes[0];
         this.chartY = orderedTotalCakes[0];
-        this.axisXLabels = new Array(30).fill(null).map((item, index, array) => ((index + 1).toString()));
-        this.axisYLabels = [];
+        this.axisYLabels = [orderedTotalCakes[0].toPrecision(4), orderedTotalCakes[orderedTotalCakes.length - 1].toPrecision(4)];
         const maxCakesWithCompoundInterestAndFees = interestsResults
           .map(y => y.cakePerMonthComposedInterestWithFees)
           .sort((a, b) => b - a)[0];
