@@ -52,14 +52,15 @@
       </div>
     </div>
 
-    <div class="tui-row mt2">
-      <!-- <div #chartContainer class="tui-col_md-12">
-        <tui-axes *ngIf="chartWidth" class="axes" [verticalLines]="4" [horizontalLines]="2">
-          <tui-line-chart [x]="0" [y]="0" [height]="300" [width]="chartWidth" [smoothingFactor]="50"
-            [value]="value" [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="true">
+    <div class="tui-row mt2 px4">
+      <div #chartContainer class="tui-col_md-12" *tuiLet="calculateCompound$ | async as chartValue">
+        <tui-axes *ngIf="chartWidth && chartValue" class="axes" [verticalLines]="30" [horizontalLines]="5"
+          [axisYInset]="true" [axisXLabels]="axisXLabels" [axisYLabels]="axisYLabels">
+          <tui-line-chart [x]="0" [y]="chartY" [height]="chartHeight" [width]="30" [smoothingFactor]="50"
+            [value]="chartValue" [xStringify]="stringify" [yStringify]="stringify" [filled]="true">
           </tui-line-chart>
         </tui-axes>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

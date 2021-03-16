@@ -94,7 +94,7 @@ export class CakePoolService {
       );
   }
 
-  get calculateCompound$(): Observable<any> {
+  get calculateCompound$(): Observable<InterestsResult[]> {
     return zip(
       this.poolPendingCake$,
       this.userInfo$,
@@ -110,9 +110,9 @@ export class CakePoolService {
           this.estimatedGas$(pendingCake),
           this.cakeBnbConversionRate$)
         ),
-        tap(([pendingCake, userInfo, gasUnitPrice, apy, estimatedGas, cakeBnbConversionRate]) => {
+        map(([pendingCake, userInfo, gasUnitPrice, apy, estimatedGas, cakeBnbConversionRate]) => {
 
-          const days = new Array(60).fill(null).map((x, index, arr) => index + 1);
+          const days = new Array(30).fill(null).map((x, index, arr) => index + 1);
           const networkFeeInCake = this.calculateEstimatedGasInCake(estimatedGas, gasUnitPrice, cakeBnbConversionRate);
           this.store.update({ networkFeeInCake });
 
@@ -134,7 +134,8 @@ export class CakePoolService {
               periodFees
             } as InterestsResult;
           });
-          debugger;
+
+          return dailyEarnings;
         })
       );
   }

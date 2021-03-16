@@ -4,7 +4,7 @@ import { TUI_DEFAULT_STRINGIFY } from '@taiga-ui/cdk';
 import { TuiPoint } from '@taiga-ui/core';
 import { TuiStatus } from '@taiga-ui/kit';
 import { zip } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { CakePoolService } from 'src/app/core/services/cake-pool.service';
 import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
@@ -23,6 +23,11 @@ import { BaseComponent } from 'src/app/shared/components/base.component';
 export class PoolCalculatorComponent extends BaseComponent {
 
   @ViewChild('chartContainer', { static: true }) public chartContainer: ElementRef;
+
+  chartY = 0;
+  chartHeight = 100;
+  axisXLabels: string[];
+  axisYLabels: string[];
 
   walletInfo$ = this.walletQuery.address$
     .pipe(
@@ -45,17 +50,31 @@ export class PoolCalculatorComponent extends BaseComponent {
       ))
     );
 
+  calculateCompound$ = this.cakePoolService.calculateCompound$
+    .pipe(
+      tap(x => {
+        const orderedTotalCakes = x
+          .map(y => y.cakePerMonthComposedInterest - y.periodFees)
+          .sort((a, b) => a - b);
+
+        this.chartHeight = orderedTotalCakes[orderedTotalCakes.length - 1] - orderedTotalCakes[0];
+        this.chartY = orderedTotalCakes[0];
+        this.axisXLabels = new Array(32).fill(null).map((item, index, array) => ((index).toString()));
+        this.axisYLabels = [];
+      }),
+      map(x => x.map(y => {
+        const totalCakes = y.cakePerMonthComposedInterest - y.periodFees;
+        return [y.day, Math.round(totalCakes * 1e3) / 1e3] as TuiPoint;
+      }))
+    );
+
   tuiStatusPrimary = TuiStatus.Primary;
 
   readonly stringify = TUI_DEFAULT_STRINGIFY;
   readonly value: ReadonlyArray<TuiPoint> = [
-    [50, 50],
-    [100, 75],
-    [150, 50],
-    [200, 150],
-    [250, 155],
-    [300, 190],
-    [350, 90],
+    [1, 15.4568],
+    [2, 15.4263],
+    [3, 15.3959],
   ];
 
   chartWidth: number;
