@@ -120,9 +120,10 @@ export class CakePoolService {
             const amountInPool = parseFloat(ethers.utils.formatUnits(userInfo.amount));
             const interestRate = calculatePeriodInterestRate(apy, day);
             const composedInterestRate = calculateComposedInterestRate(apy, day);
-            const cakePerMonthSimpleInterest = (amountInPool * interestRate) - amountInPool;
+            const cakePerMonthSimpleInterest = (amountInPool * interestRate);
             const cakePerMonthComposedInterest = (amountInPool * composedInterestRate) - amountInPool;
             const periodFees = networkFeeInCake * (30 / day);
+            const cakePerMonthComposedInterestWithFees = cakePerMonthComposedInterest - periodFees;
 
             return {
               day,
@@ -131,7 +132,8 @@ export class CakePoolService {
               cakePerMonthSimpleInterest,
               cakePerMonthComposedInterest,
               networkFeeInCake,
-              periodFees
+              periodFees,
+              cakePerMonthComposedInterestWithFees
             } as InterestsResult;
           });
 

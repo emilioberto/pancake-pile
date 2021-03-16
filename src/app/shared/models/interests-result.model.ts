@@ -6,4 +6,5 @@ export interface InterestsResult {
   cakePerMonthComposedInterest: number;
   networkFeeInCake: number;
   periodFees: number;
+  cakePerMonthComposedInterestWithFees: number;
 }
