@@ -1,6 +1,6 @@
 nav {
-  background-color: #D1884F;
-  border-bottom: 2px solid #724111;
+  background-color: #38CFD9; // #D1884F;
+  border-bottom: 1px solid #8D65DF;
 
   .connection-button {
     min-width: 200px;
@@ -8,15 +8,15 @@ nav {
 
   tui-wrapper[data-appearance='pancakeButton'] {
     background: #FEDC90;
-    color: #632F01;
+    color: #643204;
 
     &[data-state='hovered'] {
-      background: #FEDC90;
-      border: 2px solid #632F01;
+      background: #643204;
+      color: white;
     }
 
     &[data-state='pressed'] {
-      background: #632F01;
+      background: #D18850;
       color: #FEDC90;
     }
 
