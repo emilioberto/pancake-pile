@@ -1,10 +1,10 @@
 .axes {
   height: 300px;
   max-width: 100%;
-  color: #7C4BDA;
+  color: var(--accent-color-dark);
 }
 
 .pancake-dark-badge {
-  background-color: #7C4BDA;
+  background-color: var(--accent-color-dark);
   color: white;
 }

@@ -1,27 +1,27 @@
 nav {
-  background-color: #38CFD9; // #D1884F;
-  border-bottom: 1px solid #8D65DF;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--accent-color-dark);
 
   .connection-button {
     min-width: 200px;
   }
 
   tui-wrapper[data-appearance='pancakeButton'] {
-    background: #FEDC90;
-    color: #643204;
+    background: var(--primary-color-light);
+    color: var(--primary-color-dark);
 
     &[data-state='hovered'] {
-      background: #643204;
-      color: white;
+      background: var(--primary-color);
+      color: var(--primary-color-dark);
     }
 
     &[data-state='pressed'] {
-      background: #D18850;
-      color: #FEDC90;
+      background: var(--primary-color-dark);
+      color: var(--primary-color-light);
     }
 
     &[data-state='disabled'] {
-      background: #eaecee;
+      background: var(--disabled-color);
     }
   }
 }
