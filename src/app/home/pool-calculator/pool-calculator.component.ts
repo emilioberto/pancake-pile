@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 import { TUI_DEFAULT_STRINGIFY } from '@taiga-ui/cdk';
 import { TuiNotification, TuiPoint } from '@taiga-ui/core';
 import { TuiStatus } from '@taiga-ui/kit';
-import { zip } from 'rxjs';
+import { combineLatest, of, zip } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { CakePoolService } from 'src/app/core/services/cake-pool.service';
@@ -22,6 +22,12 @@ import { InterestsResult } from 'src/app/shared/models/interests-result.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PoolCalculatorComponent extends BaseComponent {
+
+  showInfo$ = combineLatest([
+    this.walletQuery.isConnected$,
+    this.walletQuery.isBsc$
+  ]).pipe(map(([isBsc, isConnected]) => isBsc && isConnected));
+
 
   @ViewChild('chartContainer', { static: true }) public chartContainer: ElementRef;
 

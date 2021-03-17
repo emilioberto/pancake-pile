@@ -1,0 +1,16 @@
+<tui-island *tuiLet="walletInfo$ | async as walletInfo">
+  <p class="tui-island__category">Wallet info</p>
+  <div class="tui-island__paragraph">
+    <label tuiLabel label="Address">
+      {{ walletQuery.address$ | async | truncateAddress: 'medium' }}
+    </label>
+
+    <label tuiLabel label="Balance">
+      <tui-money class="block" currency="BNB" [value]="walletQuery.formattedBalance$ | async">
+      </tui-money>
+      <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+        [value]="pancakeSwapQuery.formattedCakeBalance$ | async">
+      </tui-money>
+    </label>
+  </div>
+</tui-island>

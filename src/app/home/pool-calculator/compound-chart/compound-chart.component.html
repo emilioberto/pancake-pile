@@ -1,0 +1,8 @@
+<div #chartContainer class="tui-col_md-12" *tuiLet="(calculateCompound$ | async) as chartData">
+  <tui-axes *ngIf="chartWidth && chartData" class="axes" [axisYInset]="true" [axisXLabels]="axisXLabels"
+    [axisYLabels]="axisYLabels">
+    <tui-line-chart [x]="1" [y]="chartY" [height]="chartHeight" [width]="30" [smoothingFactor]="50" [value]="chartData"
+      [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="false">
+    </tui-line-chart>
+  </tui-axes>
+</div>

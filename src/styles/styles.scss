@@ -24,3 +24,12 @@ cake-root, tui-root {
 .h-100 {
   height:100%;
 }
+
+.text- {
+  &primary {
+    color: var(--text-primary-color);
+  }
+  &accent {
+    color: var(--text-accent-color);
+  }
+}

@@ -1,0 +1,22 @@
+<tui-island *tuiLet="poolInfo$ | async as poolInfo" class="mt2">
+  <p class="tui-island__category flex justify-between items-center">
+    CAKE Pool info
+    <tui-badge class="tui-space_right-2 ml2 pancake-dark-badge" [status]="tuiStatusCustom"
+      value="{{ cakePoolQuery.bonusMultiplier$ | async }}x"></tui-badge>
+  </p>
+  <div class="tui-island__paragraph">
+    <label tuiLabel label="Amount">
+      <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+        [value]="cakePoolQuery.formattedAmount$ | async">
+      </tui-money>
+    </label>
+    <label tuiLabel label="Pending">
+      <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+        [value]="cakePoolQuery.formattedPendingCake$ | async">
+      </tui-money>
+    </label>
+    <label tuiLabel label="APY">
+      {{ cakePoolQuery.apy$ | async }} %
+    </label>
+  </div>
+</tui-island>
