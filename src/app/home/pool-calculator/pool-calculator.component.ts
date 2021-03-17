@@ -23,11 +23,10 @@ import { InterestsResult } from 'src/app/shared/models/interests-result.model';
 })
 export class PoolCalculatorComponent extends BaseComponent {
 
-  showInfo$ = combineLatest([
+  showSkeleton$ = combineLatest([
     this.walletQuery.isConnected$,
     this.walletQuery.isBsc$
-  ]).pipe(map(([isBsc, isConnected]) => isBsc && isConnected));
-
+  ]).pipe(map(([isBsc, isConnected]) => !(isBsc && isConnected)));
 
   @ViewChild('chartContainer', { static: true }) public chartContainer: ElementRef;
 
@@ -37,51 +36,31 @@ export class PoolCalculatorComponent extends BaseComponent {
   axisXLabels = new Array(30).fill(null).map((item, index, array) => ((index + 1).toString()));
   axisYLabels: string[];
   suggestedCompound: InterestsResult;
-  tuiStatusCustom = TuiStatus.Custom;
   tuiStatusSuccess = TuiNotification.Success;
   readonly stringify = TUI_DEFAULT_STRINGIFY;
 
-  walletInfo$ = this.walletQuery.address$
-    .pipe(
-      switchMap(() => zip(
-        this.walletService.balance$,
-        this.pancakeSwapService.tokenSymbol$,
-        this.pancakeSwapService.addressBalance$
-      ))
-    );
 
-  poolInfo$ = this.walletQuery.address$
-    .pipe(
-      switchMap(() => zip(
-        this.cakePoolService.poolPendingCake$,
-        this.cakePoolService.userInfo$,
-        this.cakePoolService.poolInfo$,
-        this.cakePoolService.poolBonusMultiplier$,
-        this.cakePoolService.apy$,
-        this.cakePoolService.calculateCompound$
-      ))
-    );
+  // calculateCompound$ = this.cakePoolService.calculateCompound$
+  //   .pipe(
+  //     tap(interestsResults => {
+  //       const orderedTotalCakes = interestsResults
+  //         .map(y => y.cakePerMonthComposedInterestWithFees)
+  //         .sort((a, b) => a - b);
 
-  calculateCompound$ = this.cakePoolService.calculateCompound$
-    .pipe(
-      tap(interestsResults => {
-        const orderedTotalCakes = interestsResults
-          .map(y => y.cakePerMonthComposedInterestWithFees)
-          .sort((a, b) => a - b);
-
-        this.chartHeight = orderedTotalCakes[orderedTotalCakes.length - 1] - orderedTotalCakes[0];
-        this.chartY = orderedTotalCakes[0];
-        this.axisYLabels = [orderedTotalCakes[0].toPrecision(4), orderedTotalCakes[orderedTotalCakes.length - 1].toPrecision(4)];
-        const maxCakesWithCompoundInterestAndFees = interestsResults
-          .map(y => y.cakePerMonthComposedInterestWithFees)
-          .sort((a, b) => b - a)[0];
-        this.suggestedCompound = interestsResults.find(x => x.cakePerMonthComposedInterestWithFees === maxCakesWithCompoundInterestAndFees);
-      }),
-      map(x => x.map(y => {
-        const totalCakes = y.cakePerMonthComposedInterestWithFees;
-        return [y.day, Math.round(totalCakes * 1e3) / 1e3] as TuiPoint;
-      }))
-    );
+  //       this.chartHeight = orderedTotalCakes[orderedTotalCakes.length - 1] - orderedTotalCakes[0];
+  //       this.chartY = orderedTotalCakes[0];
+  //       this.axisYLabels = [orderedTotalCakes[0].toPrecision(4), orderedTotalCakes[orderedTotalCakes.length - 1].toPrecision(4)];
+  //       const maxCakesWithCompoundInterestAndFees = interestsResults
+  //         .map(y => y.cakePerMonthComposedInterestWithFees)
+  //         .sort((a, b) => b - a)[0];
+  //       this.suggestedCompound = interestsResults
+  //          .find(x => x.cakePerMonthComposedInterestWithFees === maxCakesWithCompoundInterestAndFees);
+  //     }),
+  //     map(x => x.map(y => {
+  //       const totalCakes = y.cakePerMonthComposedInterestWithFees;
+  //       return [y.day, Math.round(totalCakes * 1e3) / 1e3] as TuiPoint;
+  //     }))
+  //   );
 
   constructor(
     public cakePoolQuery: CakePoolQuery,
@@ -94,7 +73,7 @@ export class PoolCalculatorComponent extends BaseComponent {
   }
 
   onInit(): void {
-    this.chartWidth = (this.chartContainer.nativeElement as HTMLElement).clientWidth;
+    // this.chartWidth = (this.chartContainer.nativeElement as HTMLElement).clientWidth;
   }
 
   onDestroy(): void { }

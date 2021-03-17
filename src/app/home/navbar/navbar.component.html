@@ -1,8 +1,8 @@
 <nav class="flex justify-end items-center p1" *tuiLet="isConnected$ | async as isConnected">
   <ng-container *ngIf="isConnected">
     <ng-container *tuiLet="isBsc$ | async as isBsc">
-      <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2 outline outline_dark"
-        [status]="tuiStatusSuccess" value="BSC">
+      <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2 badge-bsc-connected"
+        [status]="tuiStatusCustom" value="BSC">
       </tui-badge>
     </ng-container>
   </ng-container>
@@ -23,5 +23,5 @@
 </ng-template>
 
 <ng-template #notBscBadge>
-  <tui-badge class="tui-space_right-2" [status]="tuiStatusError" value="BSC"></tui-badge>
+  <tui-badge class="tui-space_right-2 badge-bsc-disconnected" [status]="tuiStatusCustom" value="BSC"></tui-badge>
 </ng-template>

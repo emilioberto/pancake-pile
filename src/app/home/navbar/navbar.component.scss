@@ -24,4 +24,23 @@ nav {
       background: var(--disabled-color);
     }
   }
+
+  .badge-bsc-{
+    &connected {
+      background-color: #0f9200;
+      &:before {
+          content: '';
+          color: white;
+      }
+    }
+
+    &disconnected {
+      background-color: #db0000;
+      
+      &:before {
+          content: '';
+          color: white;
+      }
+    }
+  }
 }

@@ -19,8 +19,7 @@ export class NavbarComponent extends BaseComponent {
   address$ = this.walletQuery.address$;
   isBsc$ = this.walletQuery.isBsc$;
 
-  tuiStatusSuccess = TuiStatus.Success;
-  tuiStatusError = TuiStatus.Error;
+  tuiStatusCustom = TuiStatus.Custom;
 
   constructor(
     private walletQuery: WalletQuery,

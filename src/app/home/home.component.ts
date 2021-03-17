@@ -46,7 +46,7 @@ export class HomeComponent extends BaseComponent {
   private notifyIsNotBsc(): Observable<void> {
     return this.notificationsService.show(
       'Plase ensure you are connected to the Binance Smart Chain',
-      { status: TuiNotification.Warning, autoClose: false }
+      { status: TuiNotification.Error, autoClose: false }
     );
   }
 

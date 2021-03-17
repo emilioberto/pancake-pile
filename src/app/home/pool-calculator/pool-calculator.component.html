@@ -1,10 +1,10 @@
-<div *ngIf="(showInfo$ | async) else notConnected" class="tui-container_fullwidth py2 px4 h-100">
+<div class="tui-container_fullwidth py2 px4 h-100">
   <div class="tui-row tui-row_adaptive">
     <div class="tui-col_xs-12 tui-col_sm-12 tui-col_md-6">
       <!-- Wallet info -->
-      <cake-wallet-info></cake-wallet-info>
+      <cake-wallet-info [showSkeleton$]="showSkeleton$"></cake-wallet-info>
       <!-- Pool info -->
-      <cake-pool-info class="mt2"></cake-pool-info>
+      <cake-pool-info class="mt2" [showSkeleton$]="showSkeleton$"></cake-pool-info>
     </div>
 
     <div class="tui-col_xs-12 tui-col_sm-12 tui-col_md-6">
@@ -21,7 +21,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #notConnected>
-  <h1 class="center mt4 text-accent">Please connect the wallet and ensure you are connected to the BSC</h1>
-</ng-template>

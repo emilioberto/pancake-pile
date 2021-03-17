@@ -1,4 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+
+import { TuiStatus } from '@taiga-ui/kit';
+import { Observable, zip } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+import { CakePoolService } from 'src/app/core/services/cake-pool.service';
+import { CakePoolQuery } from 'src/app/core/state-management/queries/cake-pool.query';
+import { PancakeSwapQuery } from 'src/app/core/state-management/queries/pancake-swap.query';
+import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
+import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({
   selector: 'cake-pool-info',
@@ -6,11 +16,35 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./pool-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PoolInfoComponent implements OnInit {
+export class PoolInfoComponent extends BaseComponent {
 
-  constructor() { }
+  @Input() showSkeleton$: Observable<boolean>;
 
-  ngOnInit(): void {
+  tuiStatusCustom = TuiStatus.Custom;
+
+  poolInfo$ = this.walletQuery.address$
+    .pipe(
+      switchMap(() => zip(
+        this.cakePoolService.poolPendingCake$,
+        this.cakePoolService.userInfo$,
+        this.cakePoolService.poolInfo$,
+        this.cakePoolService.poolBonusMultiplier$,
+        this.cakePoolService.apy$,
+        this.cakePoolService.calculateCompound$
+      ))
+    );
+
+  constructor(
+    public cakePoolQuery: CakePoolQuery,
+    private cakePoolService: CakePoolService,
+    public walletQuery: WalletQuery,
+    public pancakeSwapQuery: PancakeSwapQuery
+  ) {
+    super();
   }
+
+  onInit(): void { }
+
+  onDestroy(): void { }
 
 }
