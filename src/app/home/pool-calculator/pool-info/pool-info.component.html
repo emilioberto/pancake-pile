@@ -6,18 +6,20 @@
         value="{{ cakePoolQuery.bonusMultiplier$ | async }}x"></tui-badge>
     </p>
     <div class="tui-island__paragraph">
-      <label tuiLabel label="Amount" [ngClass]="{ 'tui-skeleton tui-skeleton_text': showSkeleton }">
-        <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+      <label tuiLabel label="Amount">
+        <!-- <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
           [value]="cakePoolQuery.formattedAmount$ | async">
-        </tui-money>
+        </tui-money> -->
       </label>
-      <label tuiLabel label="Pending" [ngClass]="{ 'tui-skeleton tui-skeleton_text': showSkeleton }">
-        <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async"
+      <label tuiLabel label="Pending">
+        <!-- <tui-money class="block mt1" [currency]="pancakeSwapQuery.tokenName$ | async"
           [value]="cakePoolQuery.formattedPendingCake$ | async">
-        </tui-money>
+        </tui-money> -->
       </label>
-      <label tuiLabel label="APY" [ngClass]="{ 'tui-skeleton tui-skeleton_text': showSkeleton }">
-        {{ cakePoolQuery.apy$ | async }} %
+      <label tuiLabel label="APY" class="mt1">
+        <span>
+          {{ cakePoolQuery.apy$ | async }} %
+        </span>
       </label>
     </div>
   </tui-island>
