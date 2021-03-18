@@ -6,9 +6,11 @@ import { persistState } from '@datorama/akita';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-const storage = persistState();
+const storage = persistState({
+  include: ['wallet']
+});
 
-const providers = [{ provide: 'persistStorage', useValue: storage }];
+const providers = [{ provide: 'persistStorage', useValue: storage, }];
 
 if (environment.production) {
   enableProdMode();
