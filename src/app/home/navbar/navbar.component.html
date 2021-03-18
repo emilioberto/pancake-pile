@@ -1,15 +1,22 @@
-<nav class="flex justify-end items-center p1" *tuiLet="isConnected$ | async as isConnected">
-  <ng-container *ngIf="isConnected">
-    <ng-container *tuiLet="isBsc$ | async as isBsc">
-      <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2 badge-bsc-connected"
-        [status]="tuiStatusCustom" value="BSC">
-      </tui-badge>
+<nav class="flex justify-between items-center px2" *tuiLet="isConnected$ | async as isConnected">
+  <aside class="flex items-center">
+    <img src="assets/images/bunny.svg" alt="Pancake pile">
+    <h1 class="m0 ml2 nav-title">Pancake pile</h1>
+  </aside>
+
+  <aside class="flex items-center p1">
+    <ng-container *ngIf="isConnected">
+      <ng-container *tuiLet="isBsc$ | async as isBsc">
+        <tui-badge *ngIf="isBsc; else notBscBadge" class="tui-space_right-2 badge-bsc-connected"
+          [status]="tuiStatusCustom" value="BSC">
+        </tui-badge>
+      </ng-container>
     </ng-container>
-  </ng-container>
-  <button *ngIf="!isConnected; else connectedButton " tuiButton class="connection-button" type="button"
-    [appearance]="'pancakeButton'" [size]="'s'" [showLoader]="isLoading" (click)="walletService.connect()">
-    Connect
-  </button>
+    <button *ngIf="!isConnected; else connectedButton " tuiButton class="connection-button" type="button"
+      [appearance]="'pancakeButton'" [size]="'s'" [showLoader]="isLoading" (click)="walletService.connect()">
+      Connect
+    </button>
+  </aside>
 </nav>
 
 

@@ -1,23 +1,27 @@
 <ng-container *tuiLet="(showSkeleton$ | async) as showSkeleton">
   <tui-island *tuiLet="walletInfo$ | async as walletInfo">
     <p class="tui-island__category">Wallet info</p>
-    <div class="tui-island__paragraph">
-      <label tuiLabel label="Address">
-        <span [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">
-          {{ walletQuery.address$ | async | truncateAddress: 'medium' }}
-        </span>
-      </label>
+    <div class="flex justify-between items-end">
+      <div class="tui-island__paragraph">
+        <label tuiLabel label="Address">
+          <span [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">
+            {{ walletQuery.address$ | async | truncateAddress: 'medium' }}
+          </span>
+        </label>
 
-      <label tuiLabel label="Balance">
-        <tui-money class="block" currency="BNB" [value]="walletQuery.formattedBalance$ | async"
-          [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
-          [class.tui-skeleton_short]="showSkeleton">
-        </tui-money>
-        <tui-money class="block mt1" [currency]="pancakeSwapQuery.tokenName$ | async"
-          [value]="pancakeSwapQuery.formattedCakeBalance$ | async" [class.tui-skeleton]="showSkeleton"
-          [class.tui-skeleton_text]="showSkeleton" [class.tui-skeleton_short]="showSkeleton">
-        </tui-money>
-      </label>
+        <label tuiLabel label="Balance">
+          <tui-money class="block" currency="BNB" [value]="walletQuery.formattedBalance$ | async"
+            [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
+            [class.tui-skeleton_short]="showSkeleton">
+          </tui-money>
+          <tui-money class="block mt1" [currency]="pancakeSwapQuery.tokenName$ | async"
+            [value]="pancakeSwapQuery.formattedCakeBalance$ | async" [class.tui-skeleton]="showSkeleton"
+            [class.tui-skeleton_text]="showSkeleton" [class.tui-skeleton_short]="showSkeleton">
+          </tui-money>
+        </label>
+      </div>
+
+      <img src="assets/images/cake.svg" alt="cake">
     </div>
   </tui-island>
 </ng-container>

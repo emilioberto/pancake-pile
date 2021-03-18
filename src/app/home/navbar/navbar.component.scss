@@ -1,6 +1,17 @@
 nav {
   background-color: var(--background-color);
   border-bottom: 1px solid var(--accent-color-dark);
+  max-height: var(--navbar-height);
+
+  svg {
+    height: var(--navbar-height);
+  }
+
+  .nav-title {
+    color: var(--accent-color-dark);
+    font-weight: 800;
+    font-style: italic;
+  }
 
   .connection-button {
     min-width: 200px;

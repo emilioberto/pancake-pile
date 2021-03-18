@@ -6,25 +6,29 @@
         value="{{ cakePoolQuery.bonusMultiplier$ | async }}x" [class.tui-skeleton]="showSkeleton"
         [class.tui-skeleton_text]="showSkeleton" [class.tui-skeleton_short]="showSkeleton"></tui-badge>
     </p>
-    <div class="tui-island__paragraph">
-      <label tuiLabel label="Amount" *tuiLet="cakePoolQuery.formattedAmount$ | async as amount">
-        <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async" [value]="amount || 0"
-          [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
-          [class.tui-skeleton_short]="showSkeleton">
-        </tui-money>
-      </label>
-      <label tuiLabel label="Pending" *tuiLet="cakePoolQuery.formattedPendingCake$ | async as pendingCakes">
-        <tui-money class="block mt1" [currency]="pancakeSwapQuery.tokenName$ | async" [value]="pendingCakes || 0"
-          [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
-          [class.tui-skeleton_short]="showSkeleton">
-        </tui-money>
-      </label>
-      <label tuiLabel label="APY" class="mt1">
-        <span [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
-          [class.tui-skeleton_short]="showSkeleton">
-          {{ cakePoolQuery.apy$ | async }} %
-        </span>
-      </label>
+    <div class="flex justify-between items-end">
+      <div class="tui-island__paragraph">
+        <label tuiLabel label="Amount" *tuiLet="cakePoolQuery.formattedAmount$ | async as amount">
+          <tui-money class="block" [currency]="pancakeSwapQuery.tokenName$ | async" [value]="amount || 0"
+            [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
+            [class.tui-skeleton_short]="showSkeleton">
+          </tui-money>
+        </label>
+        <label tuiLabel label="Pending" *tuiLet="cakePoolQuery.formattedPendingCake$ | async as pendingCakes">
+          <tui-money class="block mt1" [currency]="pancakeSwapQuery.tokenName$ | async" [value]="pendingCakes || 0"
+            [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
+            [class.tui-skeleton_short]="showSkeleton">
+          </tui-money>
+        </label>
+        <label tuiLabel label="APY" class="mt1">
+          <span [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton"
+            [class.tui-skeleton_short]="showSkeleton">
+            {{ cakePoolQuery.apy$ | async }} %
+          </span>
+        </label>
+      </div>
+
+      <img src="assets/images/pools/cake-cake.svg" alt="cake-cake-pool">
     </div>
   </tui-island>
 </ng-container>
