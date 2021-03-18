@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Query } from '@datorama/akita';
-import { map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 import { CakePoolState, CakePoolStore } from 'src/app/core/state-management/stores/cake-pool.store';
 import { FormatEtherPipe } from 'src/app/shared/pipes/ethers/format-ether.pipe';
@@ -14,13 +14,15 @@ export class CakePoolQuery extends Query<CakePoolState> {
   pendingCake$ = this.select(state => state.pendingCake);
   formattedPendingCake$ = this.pendingCake$
     .pipe(
+      filter(pending => !!pending),
       map(pending => this.formatEtherPipe.transform(pending)),
       map(pending => Number(pending))
     );
 
-  amount$ = this.select(state => state.userInfo.amount);
+  amount$ = this.select(state => state.userInfo?.amount);
   formattedAmount$ = this.amount$
     .pipe(
+      filter(amount => !!amount),
       map(amount => this.formatEtherPipe.transform(amount)),
       map(amount => Number(amount))
     );

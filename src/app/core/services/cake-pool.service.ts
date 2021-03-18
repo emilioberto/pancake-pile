@@ -45,7 +45,10 @@ export class CakePoolService {
 
   get userInfo$(): Observable<UserInfo> {
     return from(this.cakePoolContract.userInfo(CONSTANTS.CAKE_POOL_INDEX, this.walletQuery.currentAddress))
-      .pipe(tap(userInfo => this.store.update({ userInfo })));
+      .pipe(tap(result => {
+        const userInfo = { amount: result.amount, rewardDebt: result.rewardDebt } as UserInfo;
+        this.store.update({ userInfo });
+      }));
   }
 
   get poolInfo$(): Observable<PoolInfo> {

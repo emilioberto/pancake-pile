@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { TuiStatus } from '@taiga-ui/kit';
 import { Observable, zip } from 'rxjs';
@@ -25,12 +25,13 @@ export class PoolInfoComponent extends BaseComponent {
   poolInfo$ = this.walletQuery.address$
     .pipe(
       switchMap(() => zip(
-        this.cakePoolService.poolPendingCake$,
-        this.cakePoolService.userInfo$,
-        this.cakePoolService.poolInfo$,
-        this.cakePoolService.poolBonusMultiplier$,
         this.cakePoolService.apy$,
-        this.cakePoolService.calculateCompound$
+        this.cakePoolService.userInfo$,
+        this.cakePoolService.poolPendingCake$,
+        this.cakePoolService.poolBonusMultiplier$,
+
+        // this.cakePoolService.poolInfo$,
+        // this.cakePoolService.calculateCompound$
       ))
     );
 
