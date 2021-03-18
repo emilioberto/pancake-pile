@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { BigNumber, ethers, Signer } from 'ethers';
 import { formatEther, formatUnits, parseEther, parseUnits } from 'ethers/lib/utils';
 import { from, Observable, of, zip } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { PancakeSwapService } from 'src/app/core/services/pancake-swap.service';
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
@@ -98,6 +98,7 @@ export class CakePoolService {
   }
 
   get calculateCompound$(): Observable<InterestsResult[]> {
+    this.store.setLoading(true);
     return zip(
       this.poolPendingCake$,
       this.userInfo$,
@@ -141,7 +142,8 @@ export class CakePoolService {
           });
 
           return dailyEarnings;
-        })
+        }),
+        finalize(() => this.store.setLoading(false))
       );
   }
 

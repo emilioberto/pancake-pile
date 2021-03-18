@@ -1,10 +1,12 @@
 <ng-container *tuiLet="calculateCompound$ | async as chartData">
   <ng-container *tuiLet="showSkeleton$ | async as showSkeleton">
-    <tui-notification [status]="tuiStatusSuccess" [class.tui-skeleton]="showSkeleton"
-      [class.tui-skeleton_text]="showSkeleton">
-      You can earn up to {{ suggestedCompound?.cakePerMonthComposedInterestWithFees | number: '1.3-4' }} per
-      month
-      <h5>Suggested compound every {{ suggestedCompound?.day }} days (approx. every {{
+    <tui-notification [status]="tuiStatusSuccess">
+      <span [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">
+        You can earn up to {{ suggestedCompound?.cakePerMonthComposedInterestWithFees | number: '1.3-4' }} per
+        month
+      </span>
+      <h5 [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">Suggested compound every {{
+        suggestedCompound?.day }} days (approx. every {{
         suggestedCompound?.cakePerMonthSimpleInterest | number: '1.3-4' }})</h5>
     </tui-notification>
 

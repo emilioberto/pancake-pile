@@ -18,8 +18,9 @@ export class PoolCalculatorComponent extends BaseComponent {
 
   showSkeleton$ = combineLatest([
     this.walletQuery.isConnected$,
-    this.walletQuery.isBsc$
-  ]).pipe(map(([isBsc, isConnected]) => !(isBsc && isConnected)));
+    this.walletQuery.isBsc$,
+    this.cakePoolQuery.selectLoading()
+  ]).pipe(map(([isBsc, isConnected, isLoading]) => !(isBsc && isConnected && !isLoading)));
 
   constructor(
     public cakePoolQuery: CakePoolQuery,
