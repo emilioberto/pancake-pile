@@ -1,8 +1,20 @@
-<!-- <div #chartContainer class="tui-col_md-12" *tuiLet="(calculateCompound$ | async) as chartData">
-  <tui-axes *ngIf="chartWidth && chartData" class="axes" [axisYInset]="true" [axisXLabels]="axisXLabels"
-    [axisYLabels]="axisYLabels">
-    <tui-line-chart [x]="1" [y]="chartY" [height]="chartHeight" [width]="30" [smoothingFactor]="50" [value]="chartData"
-      [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="false">
-    </tui-line-chart>
-  </tui-axes>
-</div> -->
+<ng-container *tuiLet="calculateCompound$ | async as chartData">
+  <ng-container *tuiLet="showSkeleton$ | async as showSkeleton">
+    <tui-notification [status]="tuiStatusSuccess" [class.tui-skeleton]="showSkeleton"
+      [class.tui-skeleton_text]="showSkeleton">
+      You can earn up to {{ suggestedCompound?.cakePerMonthComposedInterestWithFees | number: '1.3-4' }} per
+      month
+      <h5>Suggested compound every {{ suggestedCompound?.day }} days (approx. every {{
+        suggestedCompound?.cakePerMonthSimpleInterest | number: '1.3-4' }})</h5>
+    </tui-notification>
+
+    <div #chartContainer>
+      <tui-axes class="axes mt2" [axisYInset]="true" [axisXLabels]="axisXLabels" [axisYLabels]="axisYLabels"
+        [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">
+        <tui-line-chart [x]="1" [y]="chartY" [height]="chartHeight" [width]="30" [smoothingFactor]="50"
+          [value]="chartData" [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="false">
+        </tui-line-chart>
+      </tui-axes>
+    </div>
+  </ng-container>
+</ng-container>

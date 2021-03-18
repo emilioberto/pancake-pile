@@ -28,10 +28,7 @@ export class PoolInfoComponent extends BaseComponent {
         this.cakePoolService.apy$,
         this.cakePoolService.userInfo$,
         this.cakePoolService.poolPendingCake$,
-        this.cakePoolService.poolBonusMultiplier$,
-
-        // this.cakePoolService.poolInfo$,
-        // this.cakePoolService.calculateCompound$
+        this.cakePoolService.poolBonusMultiplier$
       ))
     );
 
