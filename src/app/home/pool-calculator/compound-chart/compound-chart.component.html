@@ -14,7 +14,7 @@
       <tui-axes class="axes mt2" [axisYInset]="true" [axisXLabels]="axisXLabels" [axisYLabels]="axisYLabels"
         [class.tui-skeleton]="showSkeleton" [class.tui-skeleton_text]="showSkeleton">
         <tui-line-chart [x]="1" [y]="chartY" [height]="chartHeight" [width]="30" [smoothingFactor]="50"
-          [value]="chartData" [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="false">
+          [value]="chartData || []" [xStringify]="stringify" [yStringify]="stringify" [dots]="true" [filled]="false">
         </tui-line-chart>
       </tui-axes>
     </div>

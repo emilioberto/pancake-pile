@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { TuiStatus } from '@taiga-ui/kit';
 import { Observable, zip } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 
 import { CakePoolService } from 'src/app/core/services/cake-pool.service';
 import { CakePoolQuery } from 'src/app/core/state-management/queries/cake-pool.query';
@@ -22,8 +22,10 @@ export class PoolInfoComponent extends BaseComponent {
 
   tuiStatusCustom = TuiStatus.Custom;
 
-  poolInfo$ = this.walletQuery.address$
+  poolInfo$ = this.walletQuery.canReadData$
     .pipe(
+      filter(canReadData => canReadData),
+      switchMap(() => this.walletQuery.address$),
       switchMap(() => zip(
         this.cakePoolService.apy$,
         this.cakePoolService.userInfo$,

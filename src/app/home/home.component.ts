@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { TuiNotification, TuiNotificationsService } from '@taiga-ui/core';
 import { BigNumber } from 'ethers';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, zip } from 'rxjs';
+import { distinctUntilChanged, filter, skip, switchMap, tap } from 'rxjs/operators';
 
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
 import { BaseComponent } from 'src/app/shared/components/base.component';
@@ -32,10 +32,20 @@ export class HomeComponent extends BaseComponent {
 
   onInit(): void {
     this.subscription.add(
-      this.walletQuery.isBsc$
+      zip(
+        this.walletQuery.isBsc$,
+        this.walletQuery.isConnected$
+      )
         .pipe(
-          filter(isBsc => !isBsc),
-          switchMap(() => this.notifyIsNotBsc())
+          switchMap(([isBsc, isConnected]) => {
+            if (!isConnected || (isConnected && isBsc)) {
+              return of(null);
+            }
+            if (!isBsc) {
+              return this.notifyIsNotBsc();
+            }
+            return of(null);
+          })
         )
         .subscribe()
     );
