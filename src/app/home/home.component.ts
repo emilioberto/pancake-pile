@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { TuiNotification, TuiNotificationsService } from '@taiga-ui/core';
 import { BigNumber } from 'ethers';
-import { BehaviorSubject, Observable, of, zip } from 'rxjs';
-import { distinctUntilChanged, filter, skip, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { WalletQuery } from 'src/app/core/state-management/queries/wallet.query';
+import { CakePoolStore } from 'src/app/core/state-management/stores/cake-pool.store';
+import { PancakeSwapStore } from 'src/app/core/state-management/stores/pancake-swap.store';
 import { BaseComponent } from 'src/app/shared/components/base.component';
 
 @Component({
@@ -25,23 +27,27 @@ export class HomeComponent extends BaseComponent {
 
   constructor(
     private notificationsService: TuiNotificationsService,
-    private walletQuery: WalletQuery
+    private walletQuery: WalletQuery,
+    private cakePoolStore: CakePoolStore,
+    private pancakeSwapStore: PancakeSwapStore,
   ) {
     super();
   }
 
   onInit(): void {
     this.subscription.add(
-      zip(
+      combineLatest([
         this.walletQuery.isBsc$,
         this.walletQuery.isConnected$
-      )
+      ])
         .pipe(
           switchMap(([isBsc, isConnected]) => {
             if (!isConnected || (isConnected && isBsc)) {
               return of(null);
             }
             if (!isBsc) {
+              this.cakePoolStore.reset();
+              this.pancakeSwapStore.reset();
               return this.notifyIsNotBsc();
             }
             return of(null);
