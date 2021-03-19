@@ -1,10 +1,11 @@
 {
   "name": "pancake-pile",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node server.js",
+    "dev":"ng serve",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -31,6 +32,7 @@
     "@taiga-ui/kit": "^2.6.2",
     "basscss": "^8.1.0",
     "ethers": "^5.0.32",
+    "express": "^4.17.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
